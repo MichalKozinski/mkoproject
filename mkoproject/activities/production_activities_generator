@@ -1,0 +1,35 @@
+import csv
+import datetime
+import random
+
+def is_weekday(date):
+    # Poniedziałek = 0, Niedziela = 6
+    return date.weekday() < 5
+
+def generate_timestamps(start_date, end_date, start_hour, end_hour):
+    current_date = start_date
+
+    while current_date <= end_date:
+        if is_weekday(current_date):
+            current_time = current_date.replace(hour=start_hour, minute=0, second=0, microsecond=0)
+            end_time = current_date.replace(hour=end_hour)
+
+            while current_time < end_time:
+                start_timestamp = current_time
+                # Zakończenie operacji 3-5 minut po rozpoczęciu
+                stop_timestamp = start_timestamp + datetime.timedelta(minutes=random.randint(3, 5))
+
+                yield (start_timestamp.strftime("%Y-%m-%d %H:%M:%S"), stop_timestamp.strftime("%Y-%m-%d %H:%M:%S"))
+
+                # Następna operacja rozpoczyna się 1 minutę po poprzedniej
+                current_time = stop_timestamp + datetime.timedelta(minutes=1)
+
+        current_date += datetime.timedelta(days=1)
+
+# Przykład użycia
+start_date = datetime.datetime(2023, 1, 1)
+end_date = datetime.datetime(2023, 12, 31)
+
+for start, stop in generate_timestamps(start_date, end_date, 8, 14):
+    print("Start:", start, "Stop:", stop)
+    print(random.)
